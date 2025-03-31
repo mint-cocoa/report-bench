@@ -1,0 +1,10 @@
+node_modules
+.git
+.github
+.gitignore
+.gitattributes
+.dockerignore
+docker-compose.yml
+README.md
+LICENSE.txt
+CODE_OF_CONDUCT.md 

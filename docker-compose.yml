@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  quartz:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./public:/usr/src/app/public
+    environment:
+      - NODE_ENV=production
+    networks:
+      - quartz-network
+
+  benchmark-analyzer:
+    build:
+      context: ./charthost
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - quartz-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - quartz
+      - benchmark-analyzer
+    networks:
+      - quartz-network
+
+networks:
+  quartz-network:
+    driver: bridge
